@@ -22,7 +22,6 @@ class ClientUploader(FileInfoExtractService.Client):
             buff = f.read()
             fd.name = file_name
             fd.buff = buff
-            print type(buff)
             f.close()
         return fd
 
@@ -38,7 +37,9 @@ if __name__ == '__main__':
         print client.ping()
         print "uploading..."
         file_data = client.make_data()
-        client.uploadFile(file_data)
+        res = client.uploadFile(file_data)
+        print res.srcImage
+        print res.urls
         print "finished"
         transport.close()
     except Exception, e:
