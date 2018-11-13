@@ -2,13 +2,14 @@ from thrift.protocol import TBinaryProtocol, TCompactProtocol
 from thrift.transport import TSocket, TTransport
 from thrift.server import TServer
 import FileInfoExtractService
-import  subprocess
+import subprocess
 import logging
 import ttypes
 import re
 
 _host = "127.0.0.1"
 _port = 9999
+_topk = 3
 
 
 class ServerListener(FileInfoExtractService.Iface):
@@ -27,14 +28,15 @@ class ServerListener(FileInfoExtractService.Iface):
         out_std = None
         try:
             out_std = subprocess.check_output(['python', 'image_pair.py', '../../upload_'+file_name,
-                                      '/Users/hujiaxuan/github/Program-Practice/taobao-sprider/imgs/', '3'])
+                                      '/Users/hujiaxuan/github/Program-Practice/taobao-sprider/imgs/', str(_topk)])
         except subprocess.CalledProcessError as e:
             out_bytes = e.output  # Output generated before error
             code = e.returncode  # Return code
             print out_bytes.decode('utf-8')
             print code
         std_out = out_std.encode('utf-8')
-        imgs = re.split('\n', std_out, maxsplit=2, )
+        imgs = re.split('\n', std_out, maxsplit=_topk, )
+        imgs = map(lambda s: s[s.find('\t')+1:], imgs)
         result = ttypes.ResultTopK(file_name,imgs)
         return result
 
