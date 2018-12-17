@@ -1,0 +1,66 @@
+<!-- 动态路由匹配 -->
+<!-- watch检测route对象 -->
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div id="app">
+    <h1> hello world </h1>
+    <p>
+        <router-link to="/foo">Go To Foo</router-link>
+        <router-link to="/bar">Go To bar</router-link>
+        <router-link to="/">Go To /</router-link>
+        <router-link to="/user/666">Go To user</router-link>
+        <router-link to="/admin/777">Go To admin</router-link>
+    </p>
+    <router-view></router-view>
+    <router-view name='a'></router-view>
+    <router-view name='b'></router-view>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+
+<script>
+
+    const Foo = { template: '<div>foo</div>'}
+    const Bar = {template: '<div>Bar</div>'}
+    const Baz = {template: '<div>Baz</div>'}
+    const User = {template: '<div>User: {{$route.params.id}}</div>'}
+    const Admin = {
+        template: "<div>Admin: {{$route.params.id}}</div>",
+        watch: {
+            '$route' (to, from) {
+                console.log(to)
+                console.log(from)
+                alert(to.path)
+                alert(from.path)
+            }
+        }
+    }
+    const routes = [
+        {path: '/foo', redirect: '/bar'},
+        {path: '/bar', component: Bar},
+        {path: '/', 
+            components: {
+                default: Foo,
+                a: Bar,
+                b: Baz
+            }
+        },
+        {path: '/user/:id', component: User},
+        {path: '/admin/:id', component: Admin}
+    ]
+
+    const router = new VueRouter({
+        routes
+    })
+
+    const app = new Vue({
+        router
+    }).$mount('#app')
+
+</script>
+</body>
+</html>

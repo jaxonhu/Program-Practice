@@ -1,3 +1,5 @@
+<!-- 同级展示多个视图 -->
+<!-- 为router-viewer设置名称 -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,8 +13,8 @@
         <router-link to="/">Go To /</router-link>
     </p>
     <router-view></router-view>
-    <router-view name= 'a'></router-view>
-    <router-view name= 'b'></router-view>
+    <router-view name='a'></router-view>
+    <router-view name='b'></router-view>
 </div>
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
@@ -26,10 +28,11 @@
     const routes = [
         {path: '/foo', redirect: '/bar'},
         {path: '/bar', component: Bar},
-        {path: '/', components: {
-            default: Foo,
-            a: Bar,
-            b: Baz 
+        {path: '/', 
+            components: {
+                default: Foo,
+                a: Bar,
+                b: Baz
             }
         }
     ]
